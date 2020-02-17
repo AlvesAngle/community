@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<title> 登录</title>
+		<link rel="stylesheet" href="/css/style.css">
+
+
+
+	</head>
+
+	<body>
+		<div class="content">
+			<div class="form sign-in">
+				<h2>欢迎回来</h2>
+				<form action="/login" method="post" >
+					<label>
+                	<span>邮箱</span>
+                	<input type="email" id="email" name="email"/><!--th:email="${session.user.accountId != null? session.user.accountId : null}"-->
+            		</label>
+					<label>
+                	<span>密码</span>
+                	<input type="password" id="password" name="password" /><!--th:password="${session.user.password != null? session.user.password : null}"-->
+            		</label>
+					<p class="forgot-pass">
+					<a href="#">忘记密码？</a>
+					</p>
+					<button type="submit" class="submit"  >登 录</button>
+					<button type="button" class="fb-btn" onclick="jump()">使用 <span>GitHub</span> 帐号登录</button>
+				</form>
+
+			</div>
+			<div class="sub-cont">
+				<div class="img">
+					<div class="img__text m--up">
+						<h2>还未注册？</h2>
+						<p>立即注册，发现大量机会！</p>
+					</div>
+					<div class="img__text m--in">
+						<h2>已有帐号？</h2>
+						<p>有帐号就登录吧，好久不见了！</p>
+					</div>
+					<div class="img__btn">
+						<span class="m--up">注 册</span>
+						<span class="m--in">登 录</span>
+					</div>
+				</div>
+				<div class="form sign-up">
+					<h2>立即注册</h2>
+					<form action="/register" method="post" >
+						<label>
+                    	<span>用户名</span>
+                    	<input type="text" id="name" name="name"/>
+                		</label>
+						<label>
+                    	<span>邮箱</span>
+                    	<input type="email" id="emailr" name="emailr"/>
+                		</label>
+						<label>
+                    	<span>密码</span>
+                    	<input type="password" id="passwordr" name="passwordr"/>
+                		</label>
+						<button  class="submit" type="submit">注 册</button>
+						<a href="https://www.baidu.com"></a>
+						<button type="button" class="fb-btn" onclick="jump()" >使用 <span>GitHub</span> 帐号注册</button>
+					</form>
+					<script type="text/javascript">
+					function jump(){
+					window.location.href="https://github.com/login/oauth/authorize?client_id=Iv1.0e169bb6b66ec2ad&redirect_uri=http://localhost:8887/callback&scope=user&state=1&";
+					}
+					</script>
+				</div>
+			</div>
+		</div>
+
+		<script src="/js/loginScript.js" type="text/javascript"></script>
+	</body>
+
+</html>

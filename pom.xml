@@ -27,6 +27,22 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
+
+
+        <!-- Spring Boot Test 依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+
+        <!--引入jdbc-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -41,15 +57,123 @@
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
-            <version>4.3.1</version>
+            <version>4.4.0</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
+        <!--Json使用包-->
+
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>1.2.62</version>
         </dependency>
+        <!--引入H2数据库-->
+        <!--
+        -注意：Cannot resolve class or package 'h2'
+        -原因是：<scope>compile</scope> 值必须为：compile
+        -->
+        <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.47</version>
+        </dependency>
 
+        <!--加入mybatis插件-->
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>2.1.1</version>
+        </dependency>
+        <!-- 引入Druid依赖，阿里巴巴所提供的数据源 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>1.0.29</version>
+        </dependency>
+        <!--Lombok项目是一个Java库，它会自动插入编辑器和构建工具中，Lombok提供了一组有用的注释，用来消除Java类中的大量样板代码。-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.12</version>
+            <scope>provided</scope>
+        </dependency>
+        <!---->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+            <scope>true</scope>
+        </dependency>
+        <!-- apache 一个工具类 用于判断字符串 工具-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.9</version>
+        </dependency>
+        <!--Apache Commons IO库包含实用程序类，流实现，文件过滤器，文件比较器，字节序转换类等。-->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.6</version>
+        </dependency>
+
+        <!--WebMagic核心包-->
+        <dependency>
+            <groupId>us.codecraft</groupId>
+            <artifactId>webmagic-core</artifactId>
+            <version>0.7.3</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!--WebMagic扩展-->
+        <dependency>
+            <groupId>us.codecraft</groupId>
+            <artifactId>webmagic-extension</artifactId>
+            <version>0.7.3</version>
+        </dependency>
+
+        <!--WebMagic对布隆过滤器的支持-->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>16.0</version>
+        </dependency>
+
+        <!--Ucloud oss 对象存储 用于上传图片。-->
+
+        <dependency>
+            <groupId>cn.ucloud.ufile</groupId>
+            <artifactId>ufile-client-java</artifactId>
+            <version>2.4.1</version>
+        </dependency>
+        <!--Alibaba oss 对象存储 用于上传图片。-->
+        <dependency>
+            <groupId>com.aliyun.oss</groupId>
+            <artifactId>aliyun-sdk-oss</artifactId>
+            <version>3.8.0</version>
+        </dependency>
+        <!--单元测试-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
+        <!---->
+        <!-- https://mvnrepository.com/artifact/com.github.pagehelper/pagehelper-spring-boot-starter -->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>1.2.12</version>
+        </dependency>
+        <!-- kaptcha 验证码开源组件 -->
+        <dependency>
+            <groupId>com.github.penggle</groupId>
+            <artifactId>kaptcha</artifactId>
+            <version>2.3.2</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -57,6 +181,25 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <!--mybatis自动生成代码插件-->
+            <plugin>
+                <groupId>org.mybatis.generator</groupId>
+                <artifactId>mybatis-generator-maven-plugin</artifactId>
+                <version>1.3.7</version>
+                <configuration>
+                    <!-- 是否覆盖，true表示会替换生成的JAVA文件，false则不覆盖 -->
+                    <overwrite>true</overwrite>
+                </configuration>
+                <dependencies>
+                    <!--mysql驱动包-->
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>5.1.47</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>

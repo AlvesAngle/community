@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>求职</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/community.css">
+    <link rel="icon" href="/images/logo.png" type="image/x-icon"/>
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <!-- <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>-->
+    <script src="/js/jquery-3.4.1.min.js"></script>
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="/js/bootstrap.js"></script>
+
+
+</head>
+<body>
+
+<!--导航栏-->
+<div th:insert="~{navigation :: nav}"></div>
+
+<div class="container-fluid main ">
+    <div class="row">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+            <h2><span class="glyphicon glyphicon-yen" aria-hidden="true">求职</span></h2>
+            <hr>
+            <div class="media" th:each="job:${jobInfoPageInfo.getList()}">
+                <div class="media-body">
+                    <h4 class="media-heading">
+                        <a th:href="@{'/job/'+${job.id} }" th:text="${job.jobName}"></a>
+                    </h4>
+                    <!-- <span th:text="${question.description}"></span><br> --><!--注释掉内容-->
+                    <span class="text-desc">
+                        公司:&nbsp;<span th:text="${job.companyName}"></span> &nbsp;&nbsp;|&nbsp;&nbsp;
+                        <!--工作地点 -->
+                        地点:&nbsp;<span th:text="${job.jobAddr}"></span>&nbsp;&nbsp;|&nbsp;&nbsp;
+                        <!-- 显示 招聘详情 -->
+                        <!--工资-->
+                        工资:&nbsp;<span th:text="${job.salaryMin/1000}+'K'+'-'+${job.salaryMax/1000}+'K'"></span>
+                    </span>
+                </div>
+
+            </div>
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <li th:if="${jobInfoPageInfo.isFirstPage}">
+                        <a th:href="@{/job(currentPage=${jobInfoPageInfo.navigateFirstPage})}" aria-label="Previous">  <!--,search=${search}-->
+                            <span aria-hidden="true">&lt;&lt;</span>
+                        </a>
+                    </li>  <!--${pagination.showPrevious}-->
+                    <li th:if="${jobInfoPageInfo.hasPreviousPage}" >
+                        <a th:href="@{/job(currentPage=${jobInfoPageInfo.prePage})}"
+                           aria-label="Previous">
+                            <span aria-hidden="true">&lt;</span>
+                        </a>
+                    </li>
+
+                    <li th:each="currentPage : ${jobInfoPageInfo.navigatepageNums}" th:class="${jobInfoPageInfo.pageNum == currentPage}? 'active' : ''">
+                        <a th:href="@{/job(currentPage=${currentPage})}" th:text="${currentPage}"></a>
+                    </li>
+
+                    <li th:if="${jobInfoPageInfo.hasNextPage}">
+                        <a th:href="@{/job(currentPage=${jobInfoPageInfo.nextPage} )}"
+                           aria-label="Previous">
+                            <span aria-hidden="true">&gt;</span>
+                        </a>
+                    </li>
+                    <li th:if="${jobInfoPageInfo.isLastPage}">
+                        <a th:href="@{/job(currentPage=${jobInfoPageInfo.navigateLastPage})}"
+                           aria-label="Previous">
+                            <span aria-hidden="true">&gt;&gt;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <h3>最新热岗位</h3>
+            </div>
+            <br/>
+            <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <img src="/images/51job-findJob.jpg" class="img-thumbnail question-weichat"/>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<!--尾页-->
+<div th:insert="~{footer :: foot}"></div>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>编辑职位</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/layuimini/lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="/layuimini/css/public.css" media="all">
+    <!--时间处理函数-->
+    <script src="/js/moment.js" type="text/javascript"></script>
+    <style>
+        body {
+            background-color: #F7F7F7;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-form layuimini-form">
+    <form class="layui-form" action=""  id="editComment" >
+
+
+        <div class="layui-form-item">
+            <input type="hidden" name="id" id="id" value="" class="layui-input">
+        </div>
+        <div class="layui-form-item" style="width: 30%">
+            <label class="layui-form-label required" >评论源</label>
+            <div class="layui-input-block">
+                <input type="text" id="parentId" name="parentId" lay-verify="required" lay-reqtext="评论源不能为空"
+                       placeholder="请输入评论源" value="" class="layui-input">
+
+            </div>
+        </div>
+        <div class="layui-form-item" style="width: 30%">
+            <label class="layui-form-label required">类型</label>
+            <div class="layui-input-block">
+                <input type="text" id="type" name="type" lay-verify="required" lay-reqtext="类型不能为空"
+                       placeholder="请输入类型" value="" class="layui-input" readonly="ture">
+
+            </div>
+        </div>
+        <div class="layui-form-item" style="width: 30%">
+            <label class="layui-form-label required">评论者</label>
+            <div class="layui-input-block">
+                <input type="text" id="commentor" name="commentor" lay-verify="required" lay-reqtext="评论者不能为空"
+                       placeholder="请输入评论者" value="" class="layui-input" readonly="ture">
+            </div>
+        </div>
+
+        <div class="layui-form-item " >
+            <label class="layui-form-label">修改时间</label>
+            <div class="layui-input-block">
+                <input type="date" name="gmtModified" id="gmtModified" autocomplete="off" value="" class="layui-input"
+                       style="width: 20%">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label required">内容</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入职位信息" id="content" name="content" text="" class="layui-textarea"></textarea>
+                <tip>填写内容</tip>
+
+            </div>
+        </div>
+        <div class="layui-form-item" style="width: 30%">
+            <label class="layui-form-label required">点赞数</label>
+            <div class="layui-input-block">
+                <input type="text" id="likeCount" name="likeCount" lay-verify="required" lay-reqtext="点赞数不能为空"
+                       placeholder="请输入点赞数" value="" class="layui-input">
+
+            </div>
+        </div>
+        <div class="layui-form-item" style="width: 30%">
+            <label class="layui-form-label required">评论数</label>
+            <div class="layui-input-block">
+                <input type="text" id="commentCount" name="commentCount" lay-verify="required" lay-reqtext="内容不能为空"
+                       placeholder="请输入内容" value="" class="layui-input">
+
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="saveBtn">确认保存</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="/layuimini/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script>
+    layui.use(['jquery', 'form'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+            $ = layui.jquery;
+        //加载初始化数据 获取 来自 数据页面的 数据
+        var commentInfo = JSON.parse(sessionStorage.getItem("commentData"));
+        //console.log("获取来自job的数据" + jobInfo.salaryMin + jobInfo.salaryMax + "时间：" + jobInfo.time);
+        //console.log(JSON.parse(sessionStorage.getItem("jobData")));
+        //并且 将数据绑定到 元素
+        $("#id").attr("value", commentInfo.id);
+        $("#parentId").attr("value", commentInfo.parentId);
+        $("#type").attr("value", commentInfo.type);
+        $("#commentor").text(commentInfo.commentor);
+        $("#gmtModified").val(moment(commentInfo.gmtModified).format('YYYY-MM-DD'));
+        $("#likeCount").attr("value", commentInfo.likeCount);
+        $("#content").attr("value", commentInfo.content);
+        $("#commentCount").val(commentInfo.commentCount);
+
+        //监听提交
+        form.on('submit(saveBtn)', function (data) {
+            var index = layer.alert(JSON.stringify(data.field), {
+                title: '最终的提交信息'
+            }, function () {
+
+
+                var map = eval("("+JSON.stringify(data.field)+")");
+                map.time = moment(map.time).valueOf();//moment转时间戳
+                //console.log("当前 时间戳 " + map.time);
+                var commentData = JSON.stringify({
+                    "commentInfo": map
+                })
+                console.log("上传数据：" + commentData)
+                //通过 ajax 返回数据给前端
+               $.ajax({
+                    type: "post",
+                    url: "/back-stage/edit/comment",
+                    contentType: "application/json",
+                    data: commentData,
+                    dataType: "json",
+                    async:false,
+                    success: function (data) {
+                        var dataInfo = JSON.stringify(data);// 先转换成json 字符串
+                        var map = JSON.parse(dataInfo); //string 转 json
+                        layer.open({
+                            title:'编辑评论',
+                            content: map["msg"]
+                        })
+                    },
+                    error: function (data) {
+                        var dataInfo = JSON.stringify(data);// 先转换成json 字符串
+                        var map = JSON.parse(dataInfo); //string 转 json
+                        layer.msg("修改失败！" + map.msg, {icon: 5});
+                    }
+
+                });
+                setTimeout(function () {
+                    // 关闭弹出层
+                    layer.close(index);
+                    var iframeIndex = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(iframeIndex);
+                },500);
+
+
+            });
+            //删除 本地session
+            sessionStorage.removeItem("commentData");
+            return false;
+        });
+
+    });
+</script>
+</body>
+</html>

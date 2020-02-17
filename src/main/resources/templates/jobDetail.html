@@ -1,0 +1,105 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title >招聘详情</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <head th:insert="~{import :: header}"></head>
+    <head th:insert="~{import :: markdown}"></head>
+
+</head>
+<body>
+
+<!--导航栏-->
+<div th:insert="~{navigation :: nav}"></div>
+<!--内容-->
+<div class="container-fluid main ">
+    <div class="row " style="width: 70%; margin: auto">
+
+        <!--左边主要内容-->
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+            <!--正文-->
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <!--职位名称-->
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <h3 class="question-title"><a th:href="@{${jobInfo.url} }" ><span th:text="${jobInfo.jobName}"></span> </a></h3>
+                    <strong class="jobSalary"><span th:text="${jobInfo.salaryMin/1000 + '-' + jobInfo.salaryMax/1000}"></span>K/月</strong>
+                </div>
+
+                <!--公司名-->
+                <h5 class="question-title">
+                    <span th:text="${jobInfo.companyName}"></span>
+                    <!-- 去往 前程无忧 投简历-->
+                </h5>
+
+                <span class="text-desc">
+                        <!--工作详情-->
+                         <span th:text="${jobInfo.details}"></span> |
+                    </span>
+                <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12 comment-sp">
+                <!--内容 将markdown 的格式内容转换成html-->
+                <h4><span class="jobBname">职位信息</span></h4>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" th:each="job:${jobInfo.jobInfo.split(' ')}">
+                    <p th:text="${job}"></p>
+                </div>
+                <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <h4><span class="jobBname">工作地址</span></h4>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
+                    <span th:text="${jobInfo.jobAddr}"></span>
+                </div>
+
+
+                <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <!--标签-->
+                <h4><span class="jobBname">公司信息</span></h4>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="company-view" th:each="companyInfo :${jobInfo.companyInfo.split(' ')}">
+                    <span th:text="${companyInfo}"></span>
+
+                </div>
+                <script type="text/javascript">
+                    $(function() {
+                        var testView = editormd.markdownToHTML("company-view", {
+                        });
+                    });
+                </script>
+
+                <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <h4><span class="jobBname">联系方式</span></h4>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
+                    <span th:text="${jobInfo.companyAddr}"></span>
+                </div>
+                <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+
+            </div>
+
+
+        </div>
+
+        <!--右边信息快-->
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+
+            <!--微信号-->
+            <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12 comment-sp">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <h4>招聘网</h4>
+                <img src="/images/51job-fresh-graduate.jpg" href="https://www.51job.com/" class="img-thumbnail question-weichat"/>
+            </div>
+            <!--相关问题-->
+            <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12 comment-sp">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <h4>去招聘网</h4>
+                <a href="https://www.51job.com/">前程无忧</a>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<!--尾页-->
+<div th:insert="~{footer :: foot}"></div>
+
+</body>
+</html>

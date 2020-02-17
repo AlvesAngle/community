@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>编辑职位</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/layuimini/lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="/layuimini/css/public.css" media="all">
+    <link rel="stylesheet" href="/css/editormd.min.css">
+    <link rel="stylesheet" href="/layuimini/css/bsMain.css">
+    <!--添加markdown 富文本 插件-->
+    <script src="/js/jquery-3.4.1.min.js" type="text/javascript"></script>
+
+    <script src="/js/editormd.min.js" type="text/javascript"></script>
+
+    <!--时间处理函数-->
+    <script src="/js/moment.js" type="text/javascript"></script>
+    <script src="/layuimini/js/bsMain.js"></script>
+    <style>
+        body {
+            background-color: #F7F7F7;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-form layuimini-form">
+    <form class="layui-form" action="" id="addQuestion">
+
+
+        <div class="layui-form-item">
+            <input type="hidden" name="id" id="id" value="" class="layui-input">
+        </div>
+        <div class="layui-form-item" style="width: 74%">
+            <label class="layui-form-label required">标题</label>
+            <div class="layui-input-block">
+                <input type="text" id="title" name="title" lay-verify="required" lay-reqtext="标题不能为空"
+                       placeholder="请输入标题" value="" class="layui-input">
+            </div>
+        </div>
+        <br/>
+        <br/>
+        <div class="layui-form-item" style="width: 78%">
+            <label class="layui-form-label required">内容</label>
+            <div class="layui-input-block" id="question-editor">
+                <textarea name="description" id="description" style="display:none;"
+                          class="form-control"
+                          cols="30"
+                          rows="50"></textarea>
+            </div>
+            <script type="text/javascript">
+                $(function () {
+                    var editor = editormd("question-editor", {
+                        width: "90%",
+                        height: 500,
+                        path: "/js/lib/",
+                        delay: 0,
+                        watch: false,
+                        placeholder: "请输入问题描述",
+                        imageUpload: true,          // Enable/disable upload
+                        imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+                        imageUploadURL: "/file/images",             // Upload url
+                    });
+                });
+            </script>
+        </div>
+
+        <br/>
+        <br/>
+        <div class="layui-form-item" style="width: 70%">
+            <div class="layui-inline">
+                <label class="layui-form-label">标签</label>
+                <div class="layui-input-block">
+                    <div class="layui-input-inline">
+                        <select name="tag-select" id="tag-select" value="" lay-filter="tag-selectfilter">
+                            <option value="">请选择标签</option>
+                            <optgroup th:each="selectCategory : ${tags}" th:label="${selectCategory.categoryName}">
+                                <option th:each="selectTag: ${selectCategory.tags}" th:value="${selectTag}"
+                                        th:text="${selectTag}">
+                                </option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    <div class="layui-input-inline">
+                        <input type="text"  class="layui-input-block"  style="width:700px;margin-left: 40px;" id="tag" name="tag"
+                               autocomplete="off" lay-verify="required"
+                               placeholder="点击标签，以，号分隔" >
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="saveBtn">确认保存</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="/layuimini/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script>
+    layui.use(['jquery', 'form'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+            $ = layui.jquery;
+        //监听select 选中元素 添加到 input
+        form.on('select(tag-selectfilter)', function(data) {
+            if($("#tag").val()==''){
+                $("#tag").attr("value", $("#tag-select").val())
+            }else{
+                $("#tag").attr("value", $("#tag").val()+','+$("#tag-select").val())
+            }
+        });
+
+        //加载初始化数据 获取 来自 数据页面的 数据
+        var questionInfo = JSON.parse(sessionStorage.getItem("questionData"));
+        //console.log("获取来自job的数据" + jobInfo.salaryMin + jobInfo.salaryMax + "时间：" + jobInfo.time);
+        console.log(questionInfo);
+        //并且 将数据绑定到 元素
+        $("#id").attr("value", questionInfo.id);
+        $("#title").attr("value", questionInfo.title);
+        $("#user").attr("value", questionInfo.user);
+        $("#description").val(questionInfo.description);
+        $("#gmtCreate").attr("value", moment(questionInfo.gmtCreate).format('YYYY-MM-DD'));
+        $("#gmtModify").attr("value",moment(questionInfo.gmtModify).format('YYYY-MM-DD'));
+        $("#tag").attr("value", questionInfo.tag);
+        //监听提交
+        form.on('submit(saveBtn)', function (data) {
+            var index = layer.alert(JSON.stringify(data.field), {
+                title: '最终的提交信息'
+            }, function () {
+
+
+                var map = eval("("+JSON.stringify(data.field)+")");
+
+                var questionData = JSON.stringify({
+                    "questionInfo": map
+                })
+                console.log("将要上传的数据 " + questionData);
+                //通过 ajax 返回数据给前端
+               $.ajax({
+                    type: "post",
+                    url: "/back-stage/edit/question",
+                    contentType: "application/json",
+                    data: questionData,
+                    dataType: "json",
+                    async:false,
+                    success: function (data) {
+                        var dataInfo = JSON.stringify(data);// 先转换成json 字符串
+                        var map = JSON.parse(dataInfo); //string 转 json
+                        layer.open({
+                            title:'修改问题',
+                            content: map["msg"]
+                        })
+                    },
+                    error: function (data) {
+                        var dataInfo = JSON.stringify(data);// 先转换成json 字符串
+                        var map = JSON.parse(dataInfo); //string 转 json
+                        layer.msg("修改失败！" + map.msg, {icon: 5});
+                    }
+
+                });
+                setTimeout(function () {
+                    // 关闭弹出层
+                    layer.close(index);
+                    var iframeIndex = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(iframeIndex);
+                },500);
+
+
+            });
+            //删除指定键的数据语法：
+            sessionStorage.removeItem("questionData");
+            //删除所有数据：
+            //sessionStorage.clear();
+            return false;
+        });
+
+    });
+</script>
+</body>
+</html>

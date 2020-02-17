@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>编辑职位</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/layuimini/lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="/layuimini/css/public.css" media="all">
+    <!--时间处理函数-->
+    <script src="/js/moment.js" type="text/javascript"></script>
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-form layuimini-form">
+    <form class="layui-form" action=""  id="editUser" >
+
+
+        <div class="layui-form-item">
+            <input type="hidden" name="id" id="id" value="" class="layui-input">
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label required">公司名</label>
+            <div class="layui-input-block">
+                <input type="text" id="companyName" name="companyName" lay-verify="required" lay-reqtext="公司名不能为空"
+                       placeholder="请输入公司名" value="" class="layui-input">
+                <tip>填写公司名</tip>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label required">公司地址</label>
+            <div class="layui-input-block">
+                <input type="text" id="companyAddr" name="companyAddr" lay-verify="required" lay-reqtext="公司地址不能为空"
+                       placeholder="请输入公司地址" value="" class="layui-input">
+                <tip>填写公司地址</tip>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label required">公司信息</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入公司信息" id="companyInfo" name="companyInfo" text=""
+                          class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label required">职位名</label>
+            <div class="layui-input-block">
+                <input type="text" id="jobName" name="jobName" lay-verify="required" lay-reqtext="职位名不能为空"
+                       placeholder="请输入职位名" value="" class="layui-input">
+                <tip>填写职位名</tip>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label required">工作地址</label>
+            <div class="layui-input-block">
+                <input type="text" id="jobAddr" name="jobAddr" lay-verify="required" lay-reqtext="工作地址不能为空"
+                       placeholder="请输入工作地址" value="" class="layui-input">
+                <tip>填写工作地址</tip>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label required">职位信息</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入职位信息" id="jobInfo" name="jobInfo" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">最小工资</label>
+            <div class="layui-input-block">
+                <input type="text" id="salaryMin" name="salaryMin" placeholder="请输入最小工资" value="" class="layui-input"
+                       style="width: 20%">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">最大工资</label>
+            <div class="layui-input-block">
+                <input type="text" id="salaryMax" name="salaryMax" placeholder="请输入最大工资" value="" class="layui-input"
+                       style="width: 20%">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">职位申请链接</label>
+            <div class="layui-input-block">
+                <input type="text" id="url" name="url" placeholder="请输入链接" value="" class="layui-input"
+                       style="width: 30%">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">发布时间</label>
+            <div class="layui-input-block">
+                <input type="date" name="time" id="time" autocomplete="off" value="" class="layui-input"
+                       style="width: 20%">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="saveBtn">确认保存</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="/layuimini/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script>
+    layui.use(['jquery', 'form'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+            $ = layui.jquery;
+        //加载初始化数据 获取 来自 数据页面的 数据
+        var jobInfo = JSON.parse(sessionStorage.getItem("jobData"));
+        //console.log("获取来自job的数据" + jobInfo.salaryMin + jobInfo.salaryMax + "时间：" + jobInfo.time);
+        //console.log(JSON.parse(sessionStorage.getItem("jobData")));
+        //并且 将数据绑定到 元素
+        $("#id").attr("value", jobInfo.id);
+        $("#companyName").attr("value", jobInfo.companyName);
+        $("#companyAddr").attr("value", jobInfo.companyAddr);
+        $("#companyInfo").text(jobInfo.companyInfo);
+        $("#jobName").attr("value", jobInfo.jobName);
+        $("#jobAddr").attr("value", jobInfo.jobAddr);
+        $("#jobInfo").val(jobInfo.jobInfo);
+        $("#salaryMin").attr("value", jobInfo.salaryMin);
+        $("#salaryMax").attr("value", jobInfo.salaryMax);
+        $("#url").attr("value", jobInfo.url);
+        $("#time").val(moment(jobInfo.time).format('YYYY-MM-DD'));
+        //监听提交
+        form.on('submit(saveBtn)', function (data) {
+            var index = layer.alert(JSON.stringify(data.field), {
+                title: '最终的提交信息'
+            }, function () {
+
+
+                var map = eval("("+JSON.stringify(data.field)+")");
+                map.time = moment(map.time).valueOf();//moment转时间戳
+                //console.log("当前 时间戳 " + map.time);
+                var jobData = JSON.stringify({
+                    "jobInfo": map
+                })
+                //通过 ajax 返回数据给前端
+               $.ajax({
+                    type: "post",
+                    url: "/back-stage/edit/jobInfo",
+                    contentType: "application/json",
+                    data: jobData,
+                    dataType: "json",
+                    async:false,
+                    success: function (data) {
+                        var dataInfo = JSON.stringify(data);// 先转换成json 字符串
+                        var map = JSON.parse(dataInfo); //string 转 json
+                        layer.open({
+                            title:'修改职位数据',
+                            content: map["msg"]
+                        })
+                    },
+                    error: function (data) {
+                        var dataInfo = JSON.stringify(data);// 先转换成json 字符串
+                        var map = JSON.parse(dataInfo); //string 转 json
+                        layer.msg("修改失败！" + map.msg, {icon: 5});
+                    }
+
+                });
+                setTimeout(function () {
+                    // 关闭弹出层
+                    layer.close(index);
+                    var iframeIndex = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(iframeIndex);
+                },500);
+
+
+            });
+            //删除指定键的数据语法：
+            sessionStorage.removeItem("jobData");
+            //删除所有数据：
+            //sessionStorage.clear();
+            return false;
+        });
+
+    });
+</script>
+</body>
+</html>

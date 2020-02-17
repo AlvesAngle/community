@@ -1,0 +1,56 @@
+{
+  "homeInfo": {
+    "title": "首页",
+    "href": "/back-stage/welcome?t=1"
+  },
+  "logoInfo": {
+    "title": "自学论坛",
+    "image": "/layuimini/images/admin_logo.png",
+    "href": ""
+  },
+  "menuInfo": [
+    {
+      "title": "后台管理",
+      "icon": "fa fa-address-book",
+      "href": "",
+      "target": "_self",
+      "child": [
+        {
+          "title": "欢迎",
+          "href": "/back-stage/welcome",
+          "icon": "fa fa-home",
+          "target": "_self"
+        },
+        {
+          "title": "用户管理",
+          "href": "/back-stage/user",
+          "icon": "fa fa-address-book",
+          "target": "_self"
+        },
+        {
+          "title": "文章管理",
+          "href": "/back-stage/question",
+          "icon": "fa fa-file-text",
+          "target": "_self"
+        },
+        {
+          "title": "评论管理",
+          "href": "/back-stage/comment",
+          "icon": "fa fa-list-alt",
+          "target": "_self"
+        },
+        {
+          "title": "职位管理",
+          "href": "/back-stage/job",
+          "icon": "fa fa-viacoin",
+          "target": "_self"
+        },
+        {
+          "title": "资源管理",
+          "href": "/back-stage/resource",
+          "icon": "fa fa-navicon",
+          "target": "_self"
+        }
+      ]
+    }]
+}
